@@ -13,12 +13,12 @@ Similer to capistrano shell command.
 
 ## get and build
 
-   mkdir $HOME/bin $HOME/lib
-   cd $HOME/lib
-   git clone git@github.com:mychaelstyle/SakuraChan.git
-   cd SakuraChan ; gradle jar
-   ln -s $HOME/lib/SakuraChan/sakurachan $HOME/bin/sakurachan
-   echo 'export PATH="$PATH:$HOME/bin" >> $HOME/.bashrc
+    mkdir $HOME/bin $HOME/lib
+    cd $HOME/lib
+    git clone git@github.com:mychaelstyle/SakuraChan.git
+    cd SakuraChan ; gradle jar
+    ln -s $HOME/lib/SakuraChan/sakurachan $HOME/bin/sakurachan
+    echo 'export PATH="$PATH:$HOME/bin" >> $HOME/.bashrc
 
 ## Configuration
 
