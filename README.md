@@ -8,15 +8,13 @@ Similer to capistrano shell command.
 
 ## requirement
 
-+ git
-+ gradle or maven2
++ git <http://git-scm.com/>
++ gradle <http://www.gradle.org/> or maven2 <http://maven.apache.org/>
 
-## get and build
+## Get started using gradle
 
-    mkdir $HOME/bin $HOME/lib
-    cd $HOME/lib
-    git clone git@github.com:mychaelstyle/SakuraChan.git
-    cd SakuraChan ; gradle jar
+    mkdir $HOME/bin $HOME/lib ; cd $HOME/lib
+    git clone git@github.com:mychaelstyle/SakuraChan.git ; cd SakuraChan ; gradle jar
     ln -s $HOME/lib/SakuraChan/sakurachan $HOME/bin/sakurachan
     echo 'export PATH="$PATH:$HOME/bin" >> $HOME/.bashrc
 
