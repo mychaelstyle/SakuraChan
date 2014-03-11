@@ -1,0 +1,10 @@
+.classpath
+.gradle
+.project
+.settings
+bin/
+build/
+config.json
+hosts.json
+datas/
+

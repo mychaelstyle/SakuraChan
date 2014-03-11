@@ -1,0 +1,35 @@
+#!/bin/bash
+
+CUR=`pwd`
+THISFILE="$0"
+
+
+while [ -h "$THISFILE" ] ; do
+  ls=`ls -ld "$THISFILE"`
+  link=`expr "$ls" : '.*-> \(.*\)$'`
+  if expr "$link" : '/.*' > /dev/null; then
+    THISFILE="$link"
+  else
+    THISFILE="`dirname "$THISFILE"`/$link"
+  fi
+done
+DIR=`dirname $THISFILE`
+
+if [ -z "$JAVA_HOME" ]; then
+  JAVA="java"
+else
+  JAVA="$JAVA_HOME/bin/java"
+fi
+
+CLASSPATH="$DIR/libs/classes"
+for FNAME in `ls $DIR/libs/jars`
+do
+  CLASSPATH="${CLASSPATH}:$DIR/libs/jars/$FNAME"
+done
+echo $CLASSPATH
+
+CONTROLLER_JAR="${DIR}/build/libs/SakuraChan-0.1.0.jar"
+CMDBASE="${JAVA} -classpath ${CLASSPATH} -jar ${CONTROLLER_JAR}"
+
+$CMDBASE $@
+

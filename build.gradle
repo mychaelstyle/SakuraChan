@@ -1,0 +1,114 @@
+apply plugin: "java"
+apply plugin: "eclipse"
+apply plugin: "maven"
+
+def defaultEncoding = 'UTF-8'
+[compileJava, compileTestJava]*.options*.encoding = defaultEncoding
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+group = 'com.mychaelstyle'
+archivesBaseName = 'SakuraChan' 
+version = '0.1.0'
+
+repositories {
+  mavenCentral()
+  maven {
+    url System.getenv("HOME") + "/.m2_dev/repository"
+  }
+}
+
+sourceSets {
+  main {
+    java {
+      srcDir 'src/main/java'
+    }
+    resources {
+      srcDir 'src/main/resources'
+    }
+  }
+  test {
+    java {
+      srcDir 'src/test/java'
+    }
+    resources {
+      srcDir 'src/test/resources'
+    }
+  }
+  testCombined {
+    java {
+      srcDir 'src/test_combined/java'
+    }
+    resources {
+      srcDir 'src/test_combined/resources'
+    }
+    compileClasspath += sourceSets.main.runtimeClasspath
+  }
+}
+
+dependencies {
+  testCompile "junit:junit:4.11"
+  compile 'org.jvnet.hudson:trilead-ssh2:build212-hudson-6'
+  compile 'commons-codec:commons-codec:1.8'
+  compile 'commons-logging:commons-logging:1.1.3'
+  compile 'com.amazonaws:aws-java-sdk:1.6.4'
+  compile 'org.json:json:20140107'
+  runtime fileTree(dir: 'build/libs', include: '*.jar')
+  runtime fileTree(dir: 'build/classes', include: '*.class')
+  testCombinedCompile "junit:junit:4.11"
+  testCombinedRuntime fileTree(dir: 'build/classes', include: '*.class')
+}
+
+configurations {
+  testCombinedCompile.extendsFrom testCompile
+  testCombinedRuntime.extendsFrom testRuntime
+}
+
+jar {
+  manifest {
+    attributes 'Implementation-Title': 'Metalics batch', 'Implementation-Version': 1.0
+    attributes "Main-Class" : "com.mychaelstyle.sakurachan.SakuraController"
+  }
+  from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+}
+
+uploadArchives {
+  repositories {
+    mavenDeployer {
+      file(System.getenv('HOME') + '/.m2_dev').mkdir()
+      file(System.getenv('HOME') + '/.m2_dev/repository').mkdir()
+      repository(url: 'file:' + System.getenv('HOME') + '/.m2_dev/repository')
+    }
+  }
+}
+
+task wrapper(type: Wrapper) {
+  gradleVersion = '1.9'
+}
+
+test {
+  maxParallelForks 10
+}
+
+task testCombined(type: Test){
+  maxParallelForks 10
+  description = "Run combined tests ... "
+  testClassesDir = sourceSets.testCombined.output.classesDir
+  classpath += sourceSets.testCombined.runtimeClasspath
+}
+
+task writePom << {
+  pom {
+    project {
+      inceptionYear '2014'
+      licenses {
+        license {
+          name 'The Apache Software License, Version 2.0'
+          url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+          distribution 'repo'
+        }
+      }
+    }
+  }.writeTo("$projectDir/pom.xml")
+}
+
